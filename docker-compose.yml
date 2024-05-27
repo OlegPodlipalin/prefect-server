@@ -13,28 +13,28 @@ services:
       - PREFECT_API_URL=http://127.0.0.1:4200/api
       - PREFECT_SERVER_API_HOST=0.0.0.0
       - PREFECT_API_KEY=my-api-key
-    healthcheck:
-      test: prefect --version || exit 1
-      interval: 10s
-      timeout: 20s
-      retries: 5
-      start_period: 10s
+    # healthcheck:
+    #   test: prefect --version || exit 1
+    #   interval: 10s
+    #   timeout: 20s
+    #   retries: 5
+    #   start_period: 10s
 
-  prefect-setup:
-    container_name: prefect-setup
-    image: prefecthq/prefect:2-python3.10
-    entrypoint: >
-      /bin/sh -c "
-      until curl -sSf http://prefect-server:4200/api/health; do
-        echo 'Waiting for Prefect server...';
-        sleep 5;
-      done;
-      prefect work-pool create --type docker d-p || echo 'Work pool already exists';
-      "
-    depends_on:
-      prefect-server:
-        condition: service_healthy
-    volumes:
-      - prefect:/root/.prefect
+  # prefect-setup:
+  #   container_name: prefect-setup
+  #   image: prefecthq/prefect:2-python3.10
+  #   entrypoint: >
+  #     /bin/sh -c "
+  #     until curl -sSf http://prefect-server:4200/api/health; do
+  #       echo 'Waiting for Prefect server...';
+  #       sleep 5;
+  #     done;
+  #     prefect work-pool create --type docker d-p || echo 'Work pool already exists';
+  #     "
+  #   depends_on:
+  #     prefect-server:
+  #       condition: service_healthy
+  #   volumes:
+  #     - prefect:/root/.prefect
 volumes:
   prefect:
