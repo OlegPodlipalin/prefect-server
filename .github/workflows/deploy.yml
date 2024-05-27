@@ -28,3 +28,30 @@ jobs:
           docker-compose up -d
           EOF
 
+name: Deploy Docker Compose to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@ec2-16-16-115-248.eu-north-1.compute.amazonaws.com << 'EOF'
+          cd /home/ubuntu/prefect-server
+          docker-compose down
+          docker-compose up -d
+          EOF
