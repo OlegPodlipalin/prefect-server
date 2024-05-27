@@ -13,3 +13,5 @@ services:
       - PREFECT_API_URL=http://127.0.0.1:4200/api
       - PREFECT_SERVER_API_HOST=0.0.0.0
       - PREFECT_API_KEY=my-api-key
+volumes:
+  prefect:
