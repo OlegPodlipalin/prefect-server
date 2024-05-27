@@ -33,4 +33,6 @@ jobs:
           cd /home/ubuntu/prefect-server
           docker-compose down
           docker-compose up -d
+          prefect work-pool create --type docker docker-pool
+          prefect worker start --pool docker-pool
           EOF
