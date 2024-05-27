@@ -1,0 +1,15 @@
+version: '3'
+services:
+  prefect-server:
+    image: prefecthq/prefect:2-python3.10
+    command: prefect server start
+    ports:
+      - "4200:4200"
+    volumes:
+      - prefect:/root/.prefect
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PREFECT_UI_URL=http://127.0.0.1:4200/api
+      - PREFECT_API_URL=http://127.0.0.1:4200/api
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_API_KEY=my-api-key
