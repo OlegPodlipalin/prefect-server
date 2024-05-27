@@ -30,7 +30,6 @@ services:
         sleep 5;
       done;
       prefect work-pool create --type docker d-p || echo 'Work pool already exists';
-      yes | prefect worker start --pool d-p
       "
     depends_on:
       prefect-server:
