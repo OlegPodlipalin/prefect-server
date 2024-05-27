@@ -19,6 +19,8 @@ jobs:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
       - name: Deploy to EC2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@ec2-16-16-115-248.eu-north-1.compute.amazonaws.com << 'EOF'
           if [ ! -d "/home/ubuntu/prefect-server" ]; then
