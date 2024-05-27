@@ -25,7 +25,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@ec2-16-16-115-248.eu-north-1.compute.amazonaws.com << 'EOF'
           export GITHUB_TOKEN=${GITHUB_TOKEN}
           if [ ! -d "/home/ubuntu/prefect-server" ]; then
-            git clone https://${GITHUB_TOKEN}@github.com/OlegPodlipalin/prefect-server.git /home/ubuntu/prefect-server
+            git clone https://github.com/OlegPodlipalin/prefect-server.git /home/ubuntu/prefect-server
           else
             cd /home/ubuntu/prefect-server
             git pull
