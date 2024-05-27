@@ -13,5 +13,15 @@ services:
       - PREFECT_API_URL=http://127.0.0.1:4200/api
       - PREFECT_SERVER_API_HOST=0.0.0.0
       - PREFECT_API_KEY=my-api-key
+
+  prefect-setup:
+    container_name: prefect-setup
+    image: prefecthq/prefect:2-python3.10
+    command: prefect work-pool create --type docker d-p && prefect worker start --pool d-p
+    depends_on:
+      prefect-server:
+        condition: service_healthy
+    volumes:
+      - prefect:/root/.prefect
 volumes:
   prefect:
