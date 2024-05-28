@@ -10,7 +10,7 @@ wait_for_server() {
 }
 
 # Start the Prefect server
-exec prefect server start &
+prefect server start &
 
 # Wait for the Prefect server to be ready
 wait_for_server
