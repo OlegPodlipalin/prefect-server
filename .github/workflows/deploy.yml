@@ -31,21 +31,24 @@ jobs:
           SSH_KEY: ${{ secrets.INSAIT_EC2_SSH_KEY }}
           SSH_PASSPHRASE: ${{ secrets.INSAIT_SSH_PASSPHRASE }}
         run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/id_rsa_staging
-          chmod 600 ~/.ssh/id_rsa_staging
-          echo "$SSH_PASSPHRASE" > ~/.ssh/passphrase.txt
-          chmod 400 ~/.ssh/passphrase.txt
-          cat >>~/.ssh/config <<EOF
-          Host staging
-            HostName $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/id_rsa_staging
-            StrictHostKeyChecking accept-new
-          EOF
-          echo Running test script
-          ssh-keygen -p -P "$(cat ~/.ssh/passphrase.txt)" -N "" -f ~/.ssh/id_rsa_staging
-      
+          ssh-agent -a $SSH_AUTH_SOCK
+          echo 'echo $SSH_PASSPHRASE' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
+          echo "$SSH_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add -
+      # mkdir -p ~/.ssh/
+      # echo "$SSH_KEY" > ~/.ssh/id_rsa_staging
+      # chmod 600 ~/.ssh/id_rsa_staging
+      # echo "$SSH_PASSPHRASE" > ~/.ssh/passphrase.txt
+      # chmod 400 ~/.ssh/passphrase.txt
+      # cat >>~/.ssh/config <<EOF
+      # Host staging
+      #   HostName $SSH_HOST
+      #   User $SSH_USER
+      #   IdentityFile ~/.ssh/id_rsa_staging
+      #   StrictHostKeyChecking accept-new
+      # EOF
+      # echo Running test script
+      # ssh-keygen -p -P "$(cat ~/.ssh/passphrase.txt)" -N "" -f ~/.ssh/id_rsa_staging
+  
       # ssh-agent -a $SSH_AUTH_SOCK
       # echo 'echo $SSH_PASSPHRASE' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
       # echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add -
