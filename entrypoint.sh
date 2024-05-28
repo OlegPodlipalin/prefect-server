@@ -3,7 +3,7 @@ set -e
 
 # Function to check if Prefect server is up
 wait_for_server() {
-  while ! curl -sSf http://localhost:4200/api/health > /dev/null; do
+  while ! curl -sSf http://127.0.0.1:4200/api/health > /dev/null; do
     echo "Waiting for Prefect server to be available..."
     sleep 5
   done
