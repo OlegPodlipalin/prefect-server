@@ -8,6 +8,9 @@ on:
   repository_dispatch:
     types: [custom-event]
 
+env:
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,20 +23,15 @@ jobs:
       #   uses: webfactory/ssh-agent@v0.5.3
       #   with:
       #     ssh-private-key: ${{ secrets.INSAIT_EC2_SSH_KEY }}
-      - name: Decrypt SSH key
-        run: |
-          echo "${{ secrets.INSAIT_EC2_SSH_KEY }}" > private_key.pem
-          echo "${{ secrets.INSAIT_SSH_PASSPHRASE }}" | openssl aes-256-cbc -d -in private_key.pem -out decrypted_key.pem -pass stdin
-          chmod 600 decrypted_key.pem
 
-      - name: Set up SSH key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: decrypted_key.pem
-
-      - name: Clean up decrypted SSH key
+      - name: Set up SSH passphrase
+        env:
+          SSH_PASSPHRASE: ${{ secrets.INSAIT_SSH_PASSPHRASE }}
+          SSH_PRIVATE_KEY: ${{ secrets.INSAIT_EC2_SSH_KEY }}
         run: |
-          rm -f private_key.pem decrypted_key.pem
+          ssh-agent -a $SSH_AUTH_SOCK
+          echo 'echo $SSH_PASSPHRASE' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add -
       
       # - name: Set up Docker Compose
       #   uses: KengoTODA/actions-setup-docker-compose@main
