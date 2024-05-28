@@ -57,7 +57,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4200:4200"
+      - "80:4200"
     volumes:
       - prefect:/root/.prefect
       - /var/run/docker.sock:/var/run/docker.sock

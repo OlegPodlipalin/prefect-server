@@ -25,15 +25,15 @@ jobs:
       #     ssh-private-key: ${{ secrets.INSAIT_EC2_SSH_KEY }}
 
       - name: Set up SSH passphrase
-        env:
-          SSH_HOST: ${{ secrets.EC2_SSH_HOST }}
-          SSH_USER: ${{ secrets.EC2_SSH_USER }}
-          SSH_KEY: ${{ secrets.INSAIT_EC2_SSH_KEY }}
-          SSH_PASSPHRASE: ${{ secrets.INSAIT_SSH_PASSPHRASE }}
+        # env:
+        #   SSH_HOST: ${{ secrets.EC2_SSH_HOST }}
+        #   SSH_USER: ${{ secrets.EC2_SSH_USER }}
+        #   SSH_KEY: ${{ secrets.INSAIT_EC2_SSH_KEY }}
+        #   SSH_PASSPHRASE: ${{ secrets.INSAIT_SSH_PASSPHRASE }}
         run: |
           ssh-agent -a $SSH_AUTH_SOCK
-          echo 'echo $SSH_PASSPHRASE' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
-          echo "$SSH_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add -
+          echo 'echo ${{ secrets.INSAIT_SSH_PASSPHRASE }}' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
+          echo "${{ secrets.INSAIT_EC2_SSH_KEY }}" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add -
       # mkdir -p ~/.ssh/
       # echo "$SSH_KEY" > ~/.ssh/id_rsa_staging
       # chmod 600 ~/.ssh/id_rsa_staging
