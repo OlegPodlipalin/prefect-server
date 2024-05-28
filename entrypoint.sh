@@ -2,7 +2,7 @@
 set -e
 
 # Start the worker in the background
-prefect worker start my-pool &
+prefect prefect worker start --pool drunkmaster
 
 # Start the Prefect server
-exec prefect server start
+prefect server start
