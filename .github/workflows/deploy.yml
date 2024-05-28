@@ -32,9 +32,14 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK
           echo "${SSH_PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem
-          echo "${SSH_PASSPHRASE}" | ssh-keygen -p -P "${SSH_PASSPHRASE}" -N "" -m PEM -f private_key.pem -q
-          ssh-add private_key.pem
-          rm private_key.pem
+          # Use expect to handle passphrase input
+          sudo apt-get update && sudo apt-get install -y expect
+          expect << EOF
+          spawn ssh-add private_key.pem
+          expect "Enter passphrase for private_key.pem:"
+          send "${SSH_PASSPHRASE}\r"
+          expect eof
+          EOF
       
       # ssh-agent -a $SSH_AUTH_SOCK
       # echo 'echo $SSH_PASSPHRASE' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
