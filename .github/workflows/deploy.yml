@@ -31,6 +31,7 @@ jobs:
         run: |
           ssh-agent -a $SSH_AUTH_SOCK
           echo "${SSH_PRIVATE_KEY}" > private_key.pem
+          chmod 600 private_key.pem
           echo "${SSH_PASSPHRASE}" | ssh-keygen -p -P "${SSH_PASSPHRASE}" -N "" -m PEM -f private_key.pem -q
           ssh-add private_key.pem
           rm private_key.pem
