@@ -58,7 +58,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_SSH_HOST }} hostname
 
-
       - name: Deploy to EC2
         env:
           DOCKER_HOST: "ssh://${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_SSH_HOST }}"
