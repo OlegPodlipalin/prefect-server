@@ -16,10 +16,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # - name: Set up SSH key
+      #   uses: webfactory/ssh-agent@v0.5.3
+      #   with:
+      #     ssh-private-key: ${{ secrets.INSAIT_EC2_SSH_KEY }}
+      - name: Decrypt SSH key
+        run: |
+          echo "${{ secrets.INSAIT_EC2_SSH_KEY }}" > private_key.pem
+          echo "${{ secrets.INSAIT_SSH_PASSPHRASE }}" | openssl aes-256-cbc -d -in private_key.pem -out decrypted_key.pem -pass stdin
+          chmod 600 decrypted_key.pem
+
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.INSAIT_EC2_SSH_KEY }}
+          ssh-private-key: decrypted_key.pem
+
+      - name: Clean up decrypted SSH key
+        run: |
+          rm -f private_key.pem decrypted_key.pem
       
       # - name: Set up Docker Compose
       #   uses: KengoTODA/actions-setup-docker-compose@main
