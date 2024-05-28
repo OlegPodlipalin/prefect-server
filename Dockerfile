@@ -2,7 +2,7 @@ FROM prefecthq/prefect:2-python3.10
 
 # Install/uninstall additional libraries
 RUN pip install prefect-docker
-RUN pip uninstall requests
+RUN pip uninstall -y requests
 RUN pip install requests==2.31.0
 
 # Create a working pool (this writes to the database)
