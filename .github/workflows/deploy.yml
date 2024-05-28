@@ -29,7 +29,7 @@ jobs:
           SSH_HOST: ${{ secrets.EC2_SSH_HOST }}
           SSH_USER: ${{ secrets.EC2_SSH_USER }}
           SSH_KEY: ${{ secrets.INSAIT_EC2_SSH_KEY }}
-          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+          SSH_PASSPHRASE: ${{ secrets.INSAIT_SSH_PASSPHRASE }}
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_KEY" > ~/.ssh/id_rsa_staging
@@ -82,7 +82,7 @@ jobs:
         #   cd /home/ubuntu/prefect-server
         #   docker-compose up -d
         #   EOF
-        - name: Clean up SSH key
-          run: |
-            ssh-add -D
-            rm -rf ~/.ssh/
+      - name: Clean up SSH key
+        run: |
+          ssh-add -D
+          rm -rf ~/.ssh/
