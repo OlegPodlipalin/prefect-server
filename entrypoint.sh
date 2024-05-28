@@ -16,7 +16,9 @@ prefect server start &
 wait_for_server
 
 # Create a working pool (this writes to the database)
-prefect work-pool create --type docker drunk-master &
+prefect work-pool create --type docker drunk-master || true
 
 # Start the worker in the background
 prefect worker start --pool drunk-master &
+
+wait
