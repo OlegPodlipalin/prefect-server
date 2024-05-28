@@ -25,10 +25,15 @@ jobs:
         uses: KengoTODA/actions-setup-docker-compose@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Debug SSH connection
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@13.50.233.142 hostname
+
 
       - name: Deploy to EC2
         run: |
-          export DOCKER_HOST="ssh://ubuntu@$13.50.233.142"
+          export DOCKER_HOST="ssh://ubuntu@13.50.233.142"
           cd $GITHUB_WORKSPACE
           docker-compose -f ./docker-compose.yml up -d
         # docker-compose -f path/to/docker-compose.yml pull
