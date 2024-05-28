@@ -20,19 +20,28 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-
-      - name: Deploy to EC2
+      
+      - name: Set up Docker Compose
+        uses: KengoTODA/actions-setup-docker-compose@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@ec2-16-16-171-100.eu-north-1.compute.amazonaws.com << 'EOF'
-          export GITHUB_TOKEN=${GITHUB_TOKEN}
-          if [ ! -d "/home/ubuntu/prefect-server" ]; then
-            git clone https://github.com/OlegPodlipalin/prefect-server.git /home/ubuntu/prefect-server
-          else
-            cd /home/ubuntu/prefect-server
-            git pull
-          fi
-          cd /home/ubuntu/prefect-server
-          docker-compose up -d
-          EOF
+          export DOCKER_HOST="ssh://ubuntu@$13.50.233.142"
+          docker-compose -f path/to/docker-compose.yml up -d
+        # docker-compose -f path/to/docker-compose.yml pull
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # run: |
+        #   ssh -o StrictHostKeyChecking=no ubuntu@ec2-16-16-171-100.eu-north-1.compute.amazonaws.com << 'EOF'
+        #   export GITHUB_TOKEN=${GITHUB_TOKEN}
+        #   if [ ! -d "/home/ubuntu/prefect-server" ]; then
+        #     git clone https://github.com/OlegPodlipalin/prefect-server.git /home/ubuntu/prefect-server
+        #   else
+        #     cd /home/ubuntu/prefect-server
+        #     git pull
+        #   fi
+        #   cd /home/ubuntu/prefect-server
+        #   docker-compose up -d
+        #   EOF
