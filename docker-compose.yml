@@ -50,7 +50,7 @@
 
 ## Build in place:
 
-version: '1'
+version: '3'
 services:
   prefect-server:
     build:
