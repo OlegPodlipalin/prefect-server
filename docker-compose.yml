@@ -1,40 +1,58 @@
+# version: '3'
+# services:
+#   prefect-server:
+#     image: prefecthq/prefect:2-python3.10
+#     command: prefect server start
+#     ports:
+#       - "4200:4200"
+#     volumes:
+#       - prefect:/root/.prefect
+#       - /var/run/docker.sock:/var/run/docker.sock
+#     environment:
+#       - PREFECT_UI_URL=http://127.0.0.1:4200/api
+#       - PREFECT_API_URL=http://127.0.0.1:4200/api
+#       - PREFECT_SERVER_API_HOST=0.0.0.0
+#       - PREFECT_API_KEY=my-api-key
+#     # healthcheck:
+#     #   test: prefect --version || exit 1
+#     #   interval: 10s
+#     #   timeout: 20s
+#     #   retries: 5
+#     #   start_period: 10s
+
+#   # prefect-setup:
+#   #   container_name: prefect-setup
+#   #   image: prefecthq/prefect:2-python3.10
+#   #   entrypoint: >
+#   #     /bin/sh -c "
+#   #     until curl -sSf http://prefect-server:4200/api/health; do
+#   #       echo 'Waiting for Prefect server...';
+#   #       sleep 5;
+#   #     done;
+#   #     prefect work-pool create --type docker d-p || echo 'Work pool already exists';
+#   #     "
+#   #   depends_on:
+#   #     prefect-server:
+#   #       condition: service_healthy
+#   #   volumes:
+#   #     - prefect:/root/.prefect
+# volumes:
+#   prefect:
 version: '3'
 services:
   prefect-server:
-    image: prefecthq/prefect:2-python3.10
-    command: prefect server start
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "4200:4200"
     volumes:
-      - prefect:/root/.prefect
+      # - prefect:/root/.prefect
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - PREFECT_UI_URL=http://127.0.0.1:4200/api
       - PREFECT_API_URL=http://127.0.0.1:4200/api
       - PREFECT_SERVER_API_HOST=0.0.0.0
       - PREFECT_API_KEY=my-api-key
-    # healthcheck:
-    #   test: prefect --version || exit 1
-    #   interval: 10s
-    #   timeout: 20s
-    #   retries: 5
-    #   start_period: 10s
-
-  # prefect-setup:
-  #   container_name: prefect-setup
-  #   image: prefecthq/prefect:2-python3.10
-  #   entrypoint: >
-  #     /bin/sh -c "
-  #     until curl -sSf http://prefect-server:4200/api/health; do
-  #       echo 'Waiting for Prefect server...';
-  #       sleep 5;
-  #     done;
-  #     prefect work-pool create --type docker d-p || echo 'Work pool already exists';
-  #     "
-  #   depends_on:
-  #     prefect-server:
-  #       condition: service_healthy
-  #   volumes:
-  #     - prefect:/root/.prefect
 volumes:
   prefect:
