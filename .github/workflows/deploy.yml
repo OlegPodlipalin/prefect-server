@@ -29,12 +29,11 @@ jobs:
           SSH_PASSPHRASE: ${{ secrets.INSAIT_SSH_PASSPHRASE }}
           SSH_PRIVATE_KEY: ${{ secrets.INSAIT_EC2_SSH_KEY }}
         run: |
-          
-
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null 
-          echo '#!/bin/sh' > ~/.ssh_askpass 
-          echo 'echo $SSH_PASSPHRASE' >> ~/.ssh_askpass && chmod +x ~/.ssh_askpass 
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add - >/dev/null
+          ssh-agent -a $SSH_AUTH_SOCK
+          echo "${SSH_PRIVATE_KEY}" > private_key.pem
+          echo "${SSH_PASSPHRASE}" | ssh-keygen -p -P "${SSH_PASSPHRASE}" -N "" -m PEM -f private_key.pem -q
+          ssh-add private_key.pem
+          rm private_key.pem
       
       # ssh-agent -a $SSH_AUTH_SOCK
       # echo 'echo $SSH_PASSPHRASE' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
