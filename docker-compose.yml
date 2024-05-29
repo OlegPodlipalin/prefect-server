@@ -67,5 +67,7 @@ services:
       - PREFECT_SERVER_API_HOST=0.0.0.0
       - PREFECT_API_KEY=${PREFECT_API_KEY}
       - PREFECT_DOCKER_WORKPOOL=${PREFECT_DOCKER_WORKPOOL}
+    networks:
+      - worker-pool
 volumes:
   prefect:
