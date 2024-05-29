@@ -69,5 +69,8 @@ services:
       - PREFECT_DOCKER_WORKPOOL=${PREFECT_DOCKER_WORKPOOL}
     networks:
       - worker-pool
+
 volumes:
   prefect:
+networks:
+  worker-pool:
