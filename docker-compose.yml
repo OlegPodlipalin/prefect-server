@@ -62,8 +62,8 @@ services:
       - prefect:/root/.prefect
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - PREFECT_UI_URL=http://127.0.0.1:4200/api
-      - PREFECT_API_URL=http://127.0.0.1:4200/api
+      - PREFECT_UI_URL=http://prefect-server:4200/api
+      - PREFECT_API_URL=http://prefect-server:4200/api
       - PREFECT_SERVER_API_HOST=0.0.0.0
       - PREFECT_API_KEY=${PREFECT_API_KEY}
       - PREFECT_DOCKER_WORKPOOL=${PREFECT_DOCKER_WORKPOOL}
