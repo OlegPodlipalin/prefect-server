@@ -53,9 +53,7 @@
 version: '3'
 services:
   prefect-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/olegpodlipalin/server_image:latest
     ports:
       - "80:4200"
     volumes:
