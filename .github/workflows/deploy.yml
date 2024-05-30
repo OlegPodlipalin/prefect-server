@@ -19,11 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Set up SSH key (no passphrase)
-      #   uses: webfactory/ssh-agent@v0.5.3
-      #   with:
-      #     ssh-private-key: ${{ secrets.INSAIT_EC2_SSH_KEY }}
-
       - name: Set up SSH with passphrase
         run: |
           ssh-agent -a $SSH_AUTH_SOCK
