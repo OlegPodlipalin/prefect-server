@@ -1,4 +1,4 @@
-name: Build and Push Docker Image and Deploy
+name: Build and Push Docker Image and Trigger Deploy
 
 on:
   push:
@@ -40,6 +40,6 @@ jobs:
         tags: ghcr.io/${{ env.OWNER_LC }}/server_image:latest
     
     - name: Trigger Deploy Workflow
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          event-type: deploy
+      uses: peter-evans/repository-dispatch@v3
+      with:
+        event-type: deploy
